@@ -19,7 +19,6 @@ static eldr_TokenType single_char_tokens[] = {
     { ')', TokenType_RIGHT_PAREN },
     { '[', TokenType_LEFT_BRACKET },
     { ']', TokenType_RIGHT_BRACKET },
-    
 };
 
 
