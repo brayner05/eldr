@@ -5,52 +5,52 @@
 
 #define INDEX_MAX (index_t)(-1)
 
-typedef struct dstring dstring;
+typedef struct DString DString;
 
-typedef struct dstring_view dstring_view;
+typedef struct DStringView DStringView;
 
 typedef size_t index_t;
 
-extern dstring *dstring_new(const char *str);
+extern DString *DString_New(const char *str);
 
-extern void dstring_delete(dstring *self);
+extern void DString_Delete(DString *self);
 
-extern char dstring_at(const dstring *self, const index_t i);
+extern char DString_At(const DString *self, const index_t i);
 
-extern dstring *dstring_append(const dstring *self, const dstring *source);
+extern DString *DString_Append(const DString *self, const DString *source);
 
-static inline dstring *dstring_appends(const dstring *self, const char *str){
-    return dstring_append(self, dstring_new(str));
+static inline DString *DString_AppendRaw(const DString *self, const char *str){
+    return DString_Append(self, DString_New(str));
 }
 
-extern size_t dstring_length(const dstring *self);
+extern size_t DString_Length(const DString *self);
 
-static inline dstring *dstring_empty(void) {
-    return dstring_new("");
+static inline DString *DString_Empty(void) {
+    return DString_New("");
 }
 
 /**
  * Gets a substring of `self` from `start` (inclusive) to `end` (exclusive).
- * Note A new `dstring` is allocated in this function.
+ * Note A new `DString` is allocated in this function.
  * 
- * @param self the `dstring` to operate on
+ * @param self the `DString` to operate on
  * @param start the index to start from (inclusive)
  * @param end the index to end at (exclusive)
  * 
  * @returns a substring of `self`
  */
-extern dstring *dstring_substring(const dstring *self, const index_t start, const index_t end);
+extern DString *DString_Substring(const DString *self, const index_t start, const index_t end);
 
-extern const char *dstring_to_char_ptr(const dstring *self);
+extern const char *DString_ToCharPtr(const DString *self);
 
-extern bool dstring_equals(const dstring *self, const dstring *other);
+extern bool DString_Equals(const DString *self, const DString *other);
 
 
 /**
  * Creates a string view of `source` from `start` (inclusive) to `end` (exclusive)
  */
-extern dstring_view *dstring_view_new(const dstring *source, index_t start, index_t end);
+extern DStringView *DStringView_New(DString *source, index_t start, index_t end);
 
-extern const char *dstring_view_to_char_ptr(const dstring_view *self);
+extern const char *DStringView_ToCharPtr(const DStringView *self);
 
 #endif

@@ -4,19 +4,21 @@
 #include <stdbool.h>
 #include "tokens.h"
 
-typedef struct eldr_LexNode {
-    const eldr_Token token;
-    struct eldr_LexNode *next;
-    struct eldr_LexNode *prev;
-} eldr_LexNode;
+typedef struct Eldr_LexNode {
+    Eldr_Token *token;
+    struct Eldr_LexNode *next;
+    struct Eldr_LexNode *prev;
+} Eldr_LexNode;
 
 
 typedef struct {
-    eldr_LexNode *head;
-    eldr_LexNode *tail;
-} eldr_TokenList;
+    Eldr_LexNode *head;
+    Eldr_LexNode *tail;
+} Eldr_TokenList;
 
 
+bool Eldr_Lexer_Init(const DString *source);
 
+Eldr_TokenList Eldr_Lexer_Tokenize(void);
 
 #endif

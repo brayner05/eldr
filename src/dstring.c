@@ -5,21 +5,21 @@
 
 #define min(x, y) ((x) < (y) ? (x) : (y))
 
-struct dstring {
+struct DString {
     char *data;
     size_t length;
 };
 
 
-struct dstring_view {
-    const dstring *source;
+struct DStringView {
+    DString *source;
     index_t start;
     index_t end;
 };
 
 
-static dstring *dstring_create(size_t length) {
-    dstring *dstr = (dstring *) calloc(1, sizeof(dstring));
+static DString *_dstring_allocate(size_t length) {
+    DString *dstr = (DString *) calloc(1, sizeof(DString));
     if (dstr == NULL)
         return NULL;
 
@@ -32,10 +32,10 @@ static dstring *dstring_create(size_t length) {
 }
 
 
-dstring *dstring_new(const char *str) {
+DString *DString_New(const char *str) {
     size_t length = strlen(str);
 
-    dstring *dstr = dstring_create(length);
+    DString *dstr = _dstring_allocate(length);
     if (dstr == NULL)
         return NULL;
 
@@ -45,7 +45,7 @@ dstring *dstring_new(const char *str) {
 }
 
 
-void dstring_delete(dstring *self) {
+void DString_Delete(DString *self) {
     if (self == NULL)
         return;
 
@@ -56,20 +56,20 @@ void dstring_delete(dstring *self) {
 }
 
 
-char dstring_at(const dstring *self, const index_t i) {
+char DString_At(const DString *self, const index_t i) {
     assert(i < self->length);
     return self->data[i];
 }
 
 
-size_t dstring_length(const dstring *self) {
+size_t DString_Length(const DString *self) {
     return self->length;
 }
 
 
-dstring *dstring_append(const dstring *self, const dstring *source) {
+DString *DString_Append(const DString *self, const DString *source) {
     size_t new_length = self->length + source->length;
-    dstring *dstr = dstring_create(new_length);
+    DString *dstr = _dstring_allocate(new_length);
     if (dstr == NULL)
         return NULL;
     
@@ -80,13 +80,13 @@ dstring *dstring_append(const dstring *self, const dstring *source) {
 }
 
 
-dstring *dstring_substring(const dstring *self, const index_t start, const index_t end) {
+DString *DString_Substring(const DString *self, const index_t start, const index_t end) {
     if (self == NULL || start >= end)
         return NULL;
 
     size_t length = min(end, self->length) - start;
 
-    dstring *dstr = dstring_create(length);
+    DString *dstr = _dstring_allocate(length);
     if (dstr == NULL)
         return NULL;
 
@@ -95,17 +95,17 @@ dstring *dstring_substring(const dstring *self, const index_t start, const index
 }
 
 
-const char *dstring_to_char_ptr(const dstring *dstr) {
+const char *DString_ToCharPtr(const DString *dstr) {
     return (const char *) dstr->data;
 }
 
 
-bool dstring_equals(const dstring *self, const dstring *other) {
+bool DString_Equals(const DString *self, const DString *other) {
     if (self->length != other->length)
         return false;
     
     for (index_t i = 0; i < self->length; ++i) {
-        if (dstring_at(self, i) != dstring_at(other, i))
+        if (DString_At(self, i) != DString_At(other, i))
             return false;
     }
 
@@ -113,8 +113,8 @@ bool dstring_equals(const dstring *self, const dstring *other) {
 }
 
 
-dstring_view *dstring_view_new(const dstring *source, index_t start, index_t end) {
-    dstring_view *view = calloc(1, sizeof(dstring_view));
+DStringView *DStringView_New(DString *source, index_t start, index_t end) {
+    DStringView *view = calloc(1, sizeof(DStringView));
     if (view == NULL)
         return NULL;
 
@@ -126,13 +126,13 @@ dstring_view *dstring_view_new(const dstring *source, index_t start, index_t end
 }
 
 
-const char *dstring_view_to_char_ptr(const dstring_view *self) {
+const char *DStringView_ToCharPtr(const DStringView *self) {
     if (self == NULL)
         return NULL;
 
-    const dstring *substring = dstring_substring(self->source, self->start, self->end);
+    const DString *substring = DString_Substring(self->source, self->start, self->end);
     if (substring == NULL)
         return NULL;
 
-    return dstring_to_char_ptr(substring);
+    return DString_ToCharPtr(substring);
 }

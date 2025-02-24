@@ -36,7 +36,7 @@ typedef enum {
     TokenType_DOT, TokenType_COMMA, 
     TokenType_COLON, TokenType_SEMICOLON, TokenType_IDENTIFIER, 
     TokenType_EOF
-} eldr_TokenType;
+} Eldr_TokenType;
 
 
 typedef union {
@@ -49,16 +49,24 @@ typedef union {
 #ifdef __SIZEOF__INT128__
     __int128_t very_long_value;
 #endif
-    const char *string_value;
-    const void *pointer_value;
-} eldr_TokenValue;
+    char *string_value;
+    void *pointer_value;
+} Eldr_TokenValue;
 
 
 typedef struct Token {
-    const eldr_TokenType type;
-    const dstring_view *lexeme;
-    const eldr_TokenValue value;
-} eldr_Token;
+    Eldr_TokenType type;
+    DStringView *lexeme;
+    Eldr_TokenValue value;
+} Eldr_Token;
 
+
+extern Eldr_Token *Eldr_Token_New(
+        const Eldr_TokenType type,
+        const DStringView *lexeme, 
+        const Eldr_TokenValue value);
+
+
+extern DString *Eldr_Token_ToString(const Eldr_Token *token);
 
 #endif

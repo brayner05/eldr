@@ -1,12 +1,23 @@
 #ifndef ELDR_H
 #define ELDR_H
 
-typedef enum {
-    eldr_COMPILED = 0,
-    eldr_INTERPRETED = (0x01),
-    eldr_RUN_REPL    = (0x02 | eldr_INTERPRETED)
-} eldr_LanguageMode;
+#include "dstring.h"
 
-eldr_LanguageMode eldr_get_language_mode(void);
+typedef enum {
+    Eldr_COMPILED = 0,
+    Eldr_INTERPRETED = (0x01),
+    Eldr_RUN_REPL    = (0x02 | Eldr_INTERPRETED)
+} Eldr_LanguageMode;
+
+
+typedef struct {
+    DString *message;
+    index_t line;
+} Eldr_Error;
+
+
+Eldr_LanguageMode Eldr_GetLanguageMode(void);
+
+// void eldr_report_error(const Eldr_Error *error);
 
 #endif
